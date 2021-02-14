@@ -25,7 +25,6 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Popper from "popper.js";
 import "jquery/dist/jquery.js";
-
 import "bootstrap/dist/js/bootstrap.js";
 
 function TopBar() {
@@ -49,14 +48,63 @@ function ProductList() {
 }
 
 function PizzaList() {
-  console.log("test");
+  const menu = [
+    {
+      number: 1,
+      pizza_name: "Margerita",
+      ingredients: ["Ser mozarella", "Sos pomidorowy", "Bazylia"],
+    },
+    {
+      number: 2,
+      pizza_name: "Hawaii",
+      ingredients: ["Ser mozarella", "Sos pomidorowy", "Ananas", "Szynka"],
+    },
+    {
+      number: 3,
+      pizza_name: "Prosciutto Fungi",
+      ingredients: ["Ser mozarella", "Sos pomidorowy", "Pieczarki", "Szynka"],
+    },
+    {
+      number: 4,
+      pizza_name: "Vegetariana",
+      ingredients: [
+        "Brokuły",
+        "Sos pomidorowy",
+        "Pieczarki",
+        "Pomidory Koktajlowe",
+        "Rukola",
+      ],
+    },
+    {
+      number: 5,
+      pizza_name: "Siciliana",
+      ingredients: [
+        "Cebula",
+        "Sos pomidorowy",
+        "Kapary",
+        "Pomidory Koktajlowe",
+        "Tuńczyk",
+      ],
+    },
+  ];
   return (
     <section className="pizzalist">
-      <OneRow name="1.Margherita" id="pizza" />
+      {menu.map((pizza) => {
+        return (
+          <OneRow
+            name={pizza.pizza_name}
+            number={pizza.number}
+            id="pizza"
+            ingredients={pizza.ingredients}
+          />
+        );
+      })}
+
+      {/* <OneRow name="1.Margherita" id="pizza" />
       <OneRow name="2.Hawaii" id="pizza" />
       <OneRow name="3.Prosciutto" id="pizza" />
       <OneRow name="4.Vegetariana" id="pizza" />
-      <OneRow name="5.Siciliana" id="pizza" />
+      <OneRow name="5.Siciliana" id="pizza" /> */}
     </section>
   );
 }
@@ -159,7 +207,11 @@ const ColoredLine = ({ color }) => (
 function WhichPhotoToServe(props) {
   const id = props.id;
   if (id === "pizza") {
-    return <img className="specific-photo" src={specific_logo}></img>;
+    return (
+      <div>
+        <img className="specific-photo" src={specific_logo}></img>
+      </div>
+    );
   } else if (id === "sauce") {
     return <img className="specific-photo" src={sauce_photo}></img>;
   } else if (id === "salad") {
@@ -230,17 +282,48 @@ function DropdownPizzaQuantity() {
 
 function OneRow(props) {
   const id = props.id;
-  return (
-    <div>
-      <ColoredLine color="#D3D3D3" />
-      <div className="one-pizza">
-        <WhichPhotoToServe id={id} />
-        <h1 style={{ height: "100%" }}>{props.name}</h1>
-        <DropdownPizzaSizeSelection />
-        <DropdownPizzaQuantity />
+  const name = props.name;
+  const number = props.number;
+  const ingredients = props.ingredients;
+  console.log(typeof ingredients);
+  if (ingredients) {
+    return (
+      <div>
+        <ColoredLine color="#D3D3D3" />
+        <div className="one-pizza">
+          <WhichPhotoToServe id={id} />
+          <div>
+            <h1>
+              {number}. {name}
+            </h1>
+            <p>
+              {ingredients.map((ingr) => {
+                const commSepIngr = [];
+                commSepIngr.push(ingr + ", ");
+                return commSepIngr;
+              })}
+            </p>
+          </div>
+          <DropdownPizzaSizeSelection />
+          <DropdownPizzaQuantity />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div>
+        <ColoredLine color="#D3D3D3" />
+        <div className="one-pizza">
+          <WhichPhotoToServe id={id} />
+          <div>
+            <h1 style={{ height: "100%" }}>{name}</h1>
+          </div>
+          <DropdownPizzaSizeSelection />
+          <DropdownPizzaQuantity />
+        </div>
+      </div>
+    );
+  }
 }
 
 function Main() {
