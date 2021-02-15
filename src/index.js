@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDom from "react-dom";
 import Button from "react-bootstrap/Button";
 
@@ -27,6 +27,9 @@ import Popper from "popper.js";
 import "jquery/dist/jquery.js";
 import "bootstrap/dist/js/bootstrap.js";
 
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
+
 function TopBar() {
   console.log("topbar");
   return (
@@ -51,22 +54,22 @@ function PizzaList() {
   const menu = [
     {
       number: 1,
-      pizza_name: "Margerita",
+      name: "Margerita",
       ingredients: ["Ser mozarella", "Sos pomidorowy", "Bazylia"],
     },
     {
       number: 2,
-      pizza_name: "Hawaii",
+      name: "Hawaii",
       ingredients: ["Ser mozarella", "Sos pomidorowy", "Ananas", "Szynka"],
     },
     {
       number: 3,
-      pizza_name: "Prosciutto Fungi",
+      name: "Prosciutto Fungi",
       ingredients: ["Ser mozarella", "Sos pomidorowy", "Pieczarki", "Szynka"],
     },
     {
       number: 4,
-      pizza_name: "Vegetariana",
+      name: "Vegetariana",
       ingredients: [
         "Brokuły",
         "Sos pomidorowy",
@@ -77,7 +80,7 @@ function PizzaList() {
     },
     {
       number: 5,
-      pizza_name: "Siciliana",
+      name: "Siciliana",
       ingredients: [
         "Cebula",
         "Sos pomidorowy",
@@ -90,21 +93,8 @@ function PizzaList() {
   return (
     <section className="pizzalist">
       {menu.map((pizza) => {
-        return (
-          <OneRow
-            name={pizza.pizza_name}
-            number={pizza.number}
-            id="pizza"
-            ingredients={pizza.ingredients}
-          />
-        );
+        return <OneRow key={pizza.id} pizza={pizza} type="pizza"></OneRow>;
       })}
-
-      {/* <OneRow name="1.Margherita" id="pizza" />
-      <OneRow name="2.Hawaii" id="pizza" />
-      <OneRow name="3.Prosciutto" id="pizza" />
-      <OneRow name="4.Vegetariana" id="pizza" />
-      <OneRow name="5.Siciliana" id="pizza" /> */}
     </section>
   );
 }
@@ -113,9 +103,9 @@ function Extras() {
   return (
     <section className="pizzalist">
       <p>Lista dodatków</p>
-      <OneRow name="Sos czosnkowy" id="sauce" />
-      <OneRow name="Sos pomidorowy" id="sauce" />
-      <OneRow name="Sos Tysiąca Wysp" id="sauce" />
+      <OneRow name="Sos czosnkowy" type="sauce" />
+      <OneRow name="Sos pomidorowy" type="sauce" />
+      <OneRow name="Sos Tysiąca Wysp" type="sauce" />
     </section>
   );
 }
@@ -124,9 +114,9 @@ function Salads() {
   return (
     <section className="pizzalist">
       <p>Lista dodatków</p>
-      <OneRow name="Sałatka Gyros" id="salad" />
-      <OneRow name="Sałatka grecka" id="salad" />
-      <OneRow name="Sałatka Cezar" id="salad" />
+      <OneRow name="Sałatka Gyros" type="salad" />
+      <OneRow name="Sałatka grecka" type="salad" />
+      <OneRow name="Sałatka Cezar" type="salad" />
     </section>
   );
 }
@@ -135,10 +125,10 @@ function Drinks() {
   return (
     <section className="pizzalist">
       <p>Lista dodatków</p>
-      <OneRow name="Woda" id="drink" />
-      <OneRow name="Cola 0,2 l" id="drink" />
-      <OneRow name="Cola 0,5 l" id="drink" />
-      <OneRow name="Lemoniada 0,2 l" id="drink" />
+      <OneRow name="Woda" type="drink" />
+      <OneRow name="Cola 0,2 l" type="drink" />
+      <OneRow name="Cola 0,5 l" type="drink" />
+      <OneRow name="Lemoniada 0,2 l" type="drink" />
     </section>
   );
 }
@@ -205,116 +195,111 @@ const ColoredLine = ({ color }) => (
 );
 
 function WhichPhotoToServe(props) {
-  const id = props.id;
-  if (id === "pizza") {
+  const type = props.type;
+  if (type === "pizza") {
     return (
       <div>
         <img className="specific-photo" src={specific_logo}></img>
       </div>
     );
-  } else if (id === "sauce") {
+  } else if (type === "sauce") {
     return <img className="specific-photo" src={sauce_photo}></img>;
-  } else if (id === "salad") {
+  } else if (type === "salad") {
     return <img className="specific-photo" src={salad_photo}></img>;
-  } else if (id === "drink") {
+  } else if (type === "drink") {
     return <img className="specific-photo" src={drink_photo}></img>;
   }
 }
 
 function DropdownPizzaSizeSelection() {
+  let [value, setValue] = useState("");
+  let handleSelect = (e) => {
+    console.log(e);
+    setValue(e);
+  };
+
   return (
-    <div class="dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="dropdownMenuButton"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
+    <div className="dropdown">
+      <span>Rozmiar</span>
+      <DropdownButton
+        title={value}
+        id="dropdown-menu-align-right"
+        variant="info"
+        onSelect={handleSelect}
       >
-        Wybierz rozmiar pizzy
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">
-          35 cm - 20 zł
-        </a>
-        <a class="dropdown-item" href="#">
-          45 cm - 28 zł
-        </a>
-      </div>
+        <Dropdown.Item eventKey="35 cm">35 cm - 20zł</Dropdown.Item>
+        <Dropdown.Item eventKey="45 cm">45 cm - 28 zł</Dropdown.Item>
+      </DropdownButton>
     </div>
   );
 }
+
+export default DropdownPizzaSizeSelection;
 
 function DropdownPizzaQuantity() {
+  let [value, setValue] = useState("");
+  let handleSelect = (e) => {
+    console.log(e);
+    console.log(e.target);
+    setValue(e);
+  };
   return (
-    <div class="dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="dropdownMenuButton"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
+    <div className="dropdown">
+      <span>Ilość</span>
+      <DropdownButton
+        title={value}
+        id="dropdown-menu-align-right"
+        variant="info"
+        onSelect={handleSelect}
       >
-        Ilość
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">
-          1
-        </a>
-        <a class="dropdown-item" href="#">
-          2
-        </a>
-        <a class="dropdown-item" href="#">
-          3
-        </a>
-        <a class="dropdown-item" href="#">
-          4
-        </a>
-        <a class="dropdown-item" href="#">
-          5
-        </a>
-      </div>
+        <Dropdown.Item eventKey="1">1</Dropdown.Item>
+        <Dropdown.Item eventKey="2">2</Dropdown.Item>
+        <Dropdown.Item eventKey="3">3</Dropdown.Item>
+      </DropdownButton>
     </div>
   );
 }
 
-function OneRow(props) {
-  const id = props.id;
-  const name = props.name;
-  const number = props.number;
-  const ingredients = props.ingredients;
-  console.log(typeof ingredients);
-  if (ingredients) {
-    return (
-      <div>
-        <ColoredLine color="#D3D3D3" />
-        <div className="one-pizza">
-          <WhichPhotoToServe id={id} />
-          <div>
-            <h1>
-              {number}. {name}
-            </h1>
-            <p>
-              {ingredients.map((ingr) => {
-                const commSepIngr = [];
-                commSepIngr.push(ingr + ", ");
-                return commSepIngr;
-              })}
-            </p>
+const OneRow = (props) => {
+  const type = props.type;
+  if (props.pizza) {
+    const { name, number, ingredients } = props.pizza;
+    if (ingredients) {
+      return (
+        <div>
+          <ColoredLine color="#D3D3D3" />
+          <div className="one-pizza">
+            <WhichPhotoToServe type={type} />
+            <div>
+              <h1>
+                {number}. {name}
+              </h1>
+              <p>
+                {ingredients.map((ingr) => {
+                  const commSepIngr = [];
+                  commSepIngr.push(ingr + ", ");
+                  return commSepIngr;
+                })}
+              </p>
+            </div>
+            <DropdownPizzaSizeSelection />
+            <DropdownPizzaQuantity />
+            <div>
+              <button type="button" className="btn btn-info">
+                Przejdź do zamówienia
+              </button>
+            </div>
           </div>
-          <DropdownPizzaSizeSelection />
-          <DropdownPizzaQuantity />
         </div>
-      </div>
-    );
+      );
+    }
   } else {
+    const { name, number } = props;
     return (
       <div>
         <ColoredLine color="#D3D3D3" />
         <div className="one-pizza">
-          <WhichPhotoToServe id={id} />
+          <WhichPhotoToServe type={type} />
           <div>
             <h1 style={{ height: "100%" }}>{name}</h1>
           </div>
@@ -324,7 +309,7 @@ function OneRow(props) {
       </div>
     );
   }
-}
+};
 
 function Main() {
   return (
