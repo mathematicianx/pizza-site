@@ -17,6 +17,7 @@ import horizontal_logo from "./images/pizza-seeklogo.com_horizontal_bar.png";
 import sauce_photo from "./images/pizza_sauce.png";
 import salad_photo from "./images/salad_photo.jpg";
 import drink_photo from "./images/drink_photo.jpg";
+import top_logo from "./images/big_logo_uptop_Flatten.png";
 
 // CSS
 import "./index.css";
@@ -34,7 +35,9 @@ function TopBar() {
   console.log("topbar");
   return (
     <section className="topbar">
-      <h3>test</h3>
+      <div className="topbar-div">
+        <img className="top-logo" src={top_logo}></img>
+      </div>
     </section>
   );
 }
@@ -212,7 +215,7 @@ function WhichPhotoToServe(props) {
 }
 
 function DropdownPizzaSizeSelection() {
-  let [value, setValue] = useState("");
+  let [value, setValue] = useState("Rozmiar pizzy");
   let handleSelect = (e) => {
     console.log(e);
     setValue(e);
@@ -220,7 +223,6 @@ function DropdownPizzaSizeSelection() {
 
   return (
     <div className="dropdown">
-      <span>Rozmiar</span>
       <DropdownButton
         title={value}
         id="dropdown-menu-align-right"
@@ -234,20 +236,16 @@ function DropdownPizzaSizeSelection() {
   );
 }
 
-export default DropdownPizzaSizeSelection;
-
 function DropdownPizzaQuantity() {
-  let [value, setValue] = useState("");
+  let [quantity, setValue] = useState("Ilość");
   let handleSelect = (e) => {
     console.log(e);
-    console.log(e.target);
     setValue(e);
   };
   return (
     <div className="dropdown">
-      <span>Ilość</span>
       <DropdownButton
-        title={value}
+        title={quantity}
         id="dropdown-menu-align-right"
         variant="info"
         onSelect={handleSelect}
@@ -305,6 +303,11 @@ const OneRow = (props) => {
           </div>
           <DropdownPizzaSizeSelection />
           <DropdownPizzaQuantity />
+          <div>
+            <button type="button" className="btn btn-info">
+              Przejdź do zamówienia
+            </button>
+          </div>
         </div>
       </div>
     );

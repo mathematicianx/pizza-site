@@ -17,6 +17,12 @@ body {
   display: inline-block;
   width: 100%;
   position: sticky;
+  top: 0;
+}
+
+.topbar-div {
+  justify-content: center;
+  display: grid;
 }
 
 .pizzalist {
@@ -107,4 +113,9 @@ section .layout {
 .horizontal-logo {
   height: 120px;
   width: 200px;
+}
+
+.top-logo {
+  height: 150px;
+  width: 452px;
 }
