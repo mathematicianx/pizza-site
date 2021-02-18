@@ -237,24 +237,49 @@ function DropdownPizzaSizeSelection() {
 }
 
 function DropdownPizzaQuantity() {
-  let [quantity, setValue] = useState("Ilość");
+  let [quantity, setValue] = useState(0);
   let handleSelect = (e) => {
     console.log(e);
     setValue(e);
   };
   return (
-    <div className="dropdown">
-      <DropdownButton
-        title={quantity}
-        id="dropdown-menu-align-right"
-        variant="info"
-        onSelect={handleSelect}
-      >
-        <Dropdown.Item eventKey="1">1</Dropdown.Item>
-        <Dropdown.Item eventKey="2">2</Dropdown.Item>
-        <Dropdown.Item eventKey="3">3</Dropdown.Item>
-      </DropdownButton>
-    </div>
+    <>
+      <div>
+        <button
+          type="button"
+          className="btn btn-info"
+          onClick={() => {
+            if (quantity > 0) {
+              setValue(quantity - 1);
+            }
+          }}
+        >
+          {"<"}
+        </button>
+        <button type="button" className="btn btn-info">
+          {quantity}
+        </button>
+        <button
+          type="button"
+          className="btn btn-info"
+          onClick={() => setValue(quantity + 1)}
+        >
+          {">"}
+        </button>
+      </div>
+      {/* <div className="dropdown">
+        <DropdownButton
+          title={quantity}
+          id="dropdown-menu-align-right"
+          variant="info"
+          onSelect={handleSelect}
+        >
+          <Dropdown.Item eventKey="1">1</Dropdown.Item>
+          <Dropdown.Item eventKey="2">2</Dropdown.Item>
+          <Dropdown.Item eventKey="3">3</Dropdown.Item>
+        </DropdownButton>
+      </div> */}
+    </>
   );
 }
 
