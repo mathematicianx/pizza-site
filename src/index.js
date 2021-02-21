@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDom from "react-dom";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+
+import { OneRow } from "./table";
 
 // FONTS AWESOME ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,14 +12,11 @@ import {
   faEnvelope,
   faClock,
   faMapMarkerAlt,
+  faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 
 // MEDIA
-import specific_logo from "./images/chad-montano-MqT0asuoIcU-unsplash.jpg";
 import horizontal_logo from "./images/pizza-seeklogo.com_horizontal_bar.png";
-import sauce_photo from "./images/pizza_sauce.png";
-import salad_photo from "./images/salad_photo.jpg";
-import drink_photo from "./images/drink_photo.jpg";
 import top_logo from "./images/big_logo_uptop_Flatten.png";
 
 // CSS
@@ -28,21 +28,31 @@ import Popper from "popper.js";
 import "jquery/dist/jquery.js";
 import "bootstrap/dist/js/bootstrap.js";
 
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
+// DATA
+import { menu } from "./data.js";
 
-function TopBar() {
+export function TopBar(props) {
   console.log("topbar");
   return (
     <section className="topbar">
       <div className="topbar-div">
+        <div></div>
         <img className="top-logo" src={top_logo}></img>
+        <div className="shopping-cart">
+          <FontAwesomeIcon icon={faShoppingCart} size="3x" />
+          <div>{props.cartValue}</div>
+          <div>
+            <button type="button" className="btn btn-info">
+              Przejdź do zamówienia
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-function ProductList() {
+export function ProductList() {
   return (
     <div>
       <PizzaList />
@@ -54,45 +64,6 @@ function ProductList() {
 }
 
 function PizzaList() {
-  const menu = [
-    {
-      number: 1,
-      name: "Margerita",
-      ingredients: ["Ser mozarella", "Sos pomidorowy", "Bazylia"],
-    },
-    {
-      number: 2,
-      name: "Hawaii",
-      ingredients: ["Ser mozarella", "Sos pomidorowy", "Ananas", "Szynka"],
-    },
-    {
-      number: 3,
-      name: "Prosciutto Fungi",
-      ingredients: ["Ser mozarella", "Sos pomidorowy", "Pieczarki", "Szynka"],
-    },
-    {
-      number: 4,
-      name: "Vegetariana",
-      ingredients: [
-        "Brokuły",
-        "Sos pomidorowy",
-        "Pieczarki",
-        "Pomidory Koktajlowe",
-        "Rukola",
-      ],
-    },
-    {
-      number: 5,
-      name: "Siciliana",
-      ingredients: [
-        "Cebula",
-        "Sos pomidorowy",
-        "Kapary",
-        "Pomidory Koktajlowe",
-        "Tuńczyk",
-      ],
-    },
-  ];
   return (
     <section className="pizzalist">
       {menu.map((pizza) => {
@@ -136,7 +107,7 @@ function Drinks() {
   );
 }
 
-function LeftMenu() {
+export function LeftMenu() {
   return (
     <section className="leftmenu">
       <div className="leftrow">
@@ -174,7 +145,7 @@ function LeftMenu() {
   );
 }
 
-function Footer() {
+export function Footer() {
   return (
     <section className="footer">
       <p>
@@ -186,163 +157,38 @@ function Footer() {
   );
 }
 
-const ColoredLine = ({ color }) => (
-  <hr
-    style={{
-      color: color,
-      backgroundColor: color,
-      height: 0.1,
-      width: "100%",
-    }}
-  />
-);
-
-function WhichPhotoToServe(props) {
-  const type = props.type;
-  if (type === "pizza") {
-    return (
-      <div>
-        <img className="specific-photo" src={specific_logo}></img>
-      </div>
-    );
-  } else if (type === "sauce") {
-    return <img className="specific-photo" src={sauce_photo}></img>;
-  } else if (type === "salad") {
-    return <img className="specific-photo" src={salad_photo}></img>;
-  } else if (type === "drink") {
-    return <img className="specific-photo" src={drink_photo}></img>;
-  }
-}
-
-function DropdownPizzaSizeSelection() {
-  let [value, setValue] = useState("Rozmiar pizzy");
-  let handleSelect = (e) => {
-    console.log(e);
-    setValue(e);
-  };
-
-  return (
-    <div className="dropdown">
-      <DropdownButton
-        title={value}
-        id="dropdown-menu-align-right"
-        variant="info"
-        onSelect={handleSelect}
-      >
-        <Dropdown.Item eventKey="35 cm">35 cm - 20zł</Dropdown.Item>
-        <Dropdown.Item eventKey="45 cm">45 cm - 28 zł</Dropdown.Item>
-      </DropdownButton>
-    </div>
-  );
-}
-
-function DropdownPizzaQuantity() {
-  let [quantity, setValue] = useState(0);
-  let handleSelect = (e) => {
-    console.log(e);
-    setValue(e);
-  };
-  return (
-    <>
-      <div>
-        <button
-          type="button"
-          className="btn btn-info"
-          onClick={() => {
-            if (quantity > 0) {
-              setValue(quantity - 1);
-            }
-          }}
-        >
-          {"<"}
-        </button>
-        <button type="button" className="btn btn-info">
-          {quantity}
-        </button>
-        <button
-          type="button"
-          className="btn btn-info"
-          onClick={() => setValue(quantity + 1)}
-        >
-          {">"}
-        </button>
-      </div>
-      {/* <div className="dropdown">
-        <DropdownButton
-          title={quantity}
-          id="dropdown-menu-align-right"
-          variant="info"
-          onSelect={handleSelect}
-        >
-          <Dropdown.Item eventKey="1">1</Dropdown.Item>
-          <Dropdown.Item eventKey="2">2</Dropdown.Item>
-          <Dropdown.Item eventKey="3">3</Dropdown.Item>
-        </DropdownButton>
-      </div> */}
-    </>
-  );
-}
-
-const OneRow = (props) => {
-  const type = props.type;
-  if (props.pizza) {
-    const { name, number, ingredients } = props.pizza;
-    if (ingredients) {
-      return (
-        <div>
-          <ColoredLine color="#D3D3D3" />
-          <div className="one-pizza">
-            <WhichPhotoToServe type={type} />
-            <div>
-              <h1>
-                {number}. {name}
-              </h1>
-              <p>
-                {ingredients.map((ingr) => {
-                  const commSepIngr = [];
-                  commSepIngr.push(ingr + ", ");
-                  return commSepIngr;
-                })}
-              </p>
-            </div>
-            <DropdownPizzaSizeSelection />
-            <DropdownPizzaQuantity />
-            <div>
-              <button type="button" className="btn btn-info">
-                Przejdź do zamówienia
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-  } else {
-    const { name, number } = props;
-    return (
-      <div>
-        <ColoredLine color="#D3D3D3" />
-        <div className="one-pizza">
-          <WhichPhotoToServe type={type} />
-          <div>
-            <h1 style={{ height: "100%" }}>{name}</h1>
-          </div>
-          <DropdownPizzaSizeSelection />
-          <DropdownPizzaQuantity />
-          <div>
-            <button type="button" className="btn btn-info">
-              Przejdź do zamówienia
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-};
-
 function Main() {
+  let chosenList = [];
+  let defaultSizeTextInfo = "Rozmiar pizzy";
+
+  const [cartValue, setCartValue] = useState(0);
+  menu.map((one_pos) => console.log(one_pos.number));
+  useEffect(() => {
+    let allSizeOfPizzas = document.querySelectorAll("#PizzaSize");
+    Array.prototype.map.call(allSizeOfPizzas, (oneSize) => {
+      oneSize.addEventListener("click", (e) => {
+        if (e.target.innerText === defaultSizeTextInfo) {
+          console.log("default value");
+        } else {
+          let chosenSize = { number: e.target.id, size: e.target.innerText };
+          // return console.log(e.target.innerText, e.target.id);
+          chosenList = [...chosenList, chosenSize];
+          menu.forEach((menuOnePosition) => {
+            chosenList.forEach((chosenElement) => {
+              if (chosenElement.number === menuOnePosition.number.toString()) {
+                // console.log(menuOnePosition.price["35cm"]);
+                setCartValue(cartValue + menuOnePosition.price["35cm"]);
+              }
+            });
+          });
+        }
+      });
+    });
+  });
+
   return (
     <section className="main">
-      <TopBar />
+      <TopBar cartValue={cartValue}></TopBar>
       <div className="background">
         <div className="layout">
           <LeftMenu />
