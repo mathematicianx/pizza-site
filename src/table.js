@@ -10,15 +10,6 @@ import sauce_photo from "./images/pizza_sauce.png";
 import salad_photo from "./images/salad_photo.jpg";
 import drink_photo from "./images/drink_photo.jpg";
 
-// // CSS
-// import "./index.css";
-
-// // BOOTSTRAP CSS
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import Popper from "popper.js";
-// import "jquery/dist/jquery.js";
-// import "bootstrap/dist/js/bootstrap.js";
-
 const ColoredLine = ({ color }) => (
   <hr
     style={{
@@ -61,7 +52,6 @@ function DropdownSizeSelection(props) {
       <DropdownButton
         title={size}
         size={size}
-        id="dropdown-menu-align-right"
         variant="info"
         onSelect={handleSelect}
       >
@@ -86,6 +76,7 @@ function DropdownQuantity() {
     <>
       <div>
         <button
+          id="quantityLess"
           type="button"
           className="btn btn-info"
           onClick={() => {
@@ -96,10 +87,11 @@ function DropdownQuantity() {
         >
           {"<"}
         </button>
-        <button type="button" className="btn btn-info">
+        <button type="button" className="btn btn-info" id="quantity">
           {quantity}
         </button>
         <button
+          id="quantityMore"
           type="button"
           className="btn btn-info"
           onClick={() => setValue(quantity + 1)}

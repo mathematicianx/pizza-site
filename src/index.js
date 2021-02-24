@@ -54,11 +54,11 @@ export function TopBar(props) {
 
 export function ProductList() {
   return (
-    <div>
-      <PizzaList />
-      <Extras />
-      <Salads />
-      <Drinks />
+    <div key="productList">
+      <PizzaList key="pizzalist" />
+      <Extras key="extras" />
+      <Salads key="salads" />
+      <Drinks key="drinks" />
     </div>
   );
 }
@@ -77,9 +77,9 @@ function Extras() {
   return (
     <section className="pizzalist">
       <p>Lista dodatków</p>
-      <OneRow name="Sos czosnkowy" type="sauce" />
-      <OneRow name="Sos pomidorowy" type="sauce" />
-      <OneRow name="Sos Tysiąca Wysp" type="sauce" />
+      <OneRow name="Sos czosnkowy" type="sauce" key="Sos czosnkowy" />
+      <OneRow name="Sos pomidorowy" type="sauce" key="Sos pomidorowy" />
+      <OneRow name="Sos Tysiąca Wysp" type="sauce" key="Sos Tysiąca Wysp" />
     </section>
   );
 }
@@ -158,33 +158,37 @@ export function Footer() {
 }
 
 function Main() {
-  let chosenList = [];
-  let defaultSizeTextInfo = "Rozmiar pizzy";
-
   const [cartValue, setCartValue] = useState(0);
-  menu.map((one_pos) => console.log(one_pos.number));
+  const [cartObjects, setCartObjects] = useState([]);
+  const [activeSize, setActiveSize] = useState();
+  const [activeQuantity, setActiveQuantity] = useState(0);
+  const [tId, setTId] = useState();
+
   useEffect(() => {
-    let allSizeOfPizzas = document.querySelectorAll("#PizzaSize");
-    Array.prototype.map.call(allSizeOfPizzas, (oneSize) => {
-      oneSize.addEventListener("click", (e) => {
-        if (e.target.innerText === defaultSizeTextInfo) {
-          console.log("default value");
-        } else {
-          let chosenSize = { number: e.target.id, size: e.target.innerText };
-          // return console.log(e.target.innerText, e.target.id);
-          chosenList = [...chosenList, chosenSize];
-          menu.forEach((menuOnePosition) => {
-            chosenList.forEach((chosenElement) => {
-              if (chosenElement.number === menuOnePosition.number.toString()) {
-                // console.log(menuOnePosition.price["35cm"]);
-                setCartValue(cartValue + menuOnePosition.price["35cm"]);
-              }
-            });
-          });
-        }
+    let available = ["1", "2", "3", "4", "5"];
+    function dropdownSelection(e) {
+      if (available.includes(e.target.id)) {
+        console.log(e.target.id);
+        setActiveSize(e.target.innerText); // TODO make this work for a list
+      } else if (e.target.id === "quantityLess") {
+        setActiveQuantity(() => {
+          return activeQuantity - 1;
+        });
+      } else if (e.target.id === "quantityMore") {
+        setActiveQuantity(() => {
+          return activeQuantity + 1;
+        });
+      }
+      return setTId(e.target.id);
+    }
+    let pizzaRows = document.querySelectorAll(".one-pizza");
+    pizzaRows.forEach((row) => {
+      row.addEventListener("click", dropdownSelection);
+      setCartValue(() => {
+        return activeSize + activeQuantity;
       });
     });
-  });
+  }, [activeQuantity, cartValue, activeSize]);
 
   return (
     <section className="main">
@@ -202,16 +206,11 @@ function Main() {
 
 // ReactDom.render(<PizzaList />, document.getElementById("root"));
 ReactDom.render(<Main />, document.getElementById("root"));
-{
-  /* <a href="https://www.freepik.com/photos/background">
+
+/* <a href="https://www.freepik.com/photos/background">
   Background photo created by Racool_studio - www.freepik.com
 </a>; */
-}
 
-{
-  /* <a href='https://www.freepik.com/vectors/logo'>Logo vector created by freepik - www.freepik.com</a> */
-}
+/* <a href='https://www.freepik.com/vectors/logo'>Logo vector created by freepik - www.freepik.com</a> */
 
-{
-  /* <span>Photo by <a href="https://unsplash.com/@briewilly?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Chad Montano</a> on <a href="https://unsplash.com/images/food/pizza?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> */
-}
+/* <span>Photo by <a href="https://unsplash.com/@briewilly?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Chad Montano</a> on <a href="https://unsplash.com/images/food/pizza?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> */
