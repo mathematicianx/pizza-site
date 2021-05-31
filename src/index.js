@@ -5,6 +5,9 @@ import Button from "react-bootstrap/Button";
 
 import { OneRow } from "./table";
 
+// DATA
+import { menu } from "./data.js";
+
 // FONTS AWESOME ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,8 +31,6 @@ import Popper from "popper.js";
 import "jquery/dist/jquery.js";
 import "bootstrap/dist/js/bootstrap.js";
 
-// DATA
-import { menu } from "./data.js";
 
 export function TopBar(props) {
   console.log("topbar");
@@ -67,7 +68,7 @@ function PizzaList() {
   return (
     <section className="pizzalist">
       {menu.map((pizza) => {
-        return <OneRow key={pizza.id} pizza={pizza} type="pizza"></OneRow>;
+        return <OneRow key={pizza.number} pizza={pizza} type="pizza"></OneRow>;
       })}
     </section>
   );
@@ -159,17 +160,17 @@ export function Footer() {
 
 function Main() {
   const [cartValue, setCartValue] = useState(0);
-  const [cartObjects, setCartObjects] = useState([]);
-  const [activeSize, setActiveSize] = useState();
+  const [cartObjects, setCartObjects] = useState([0]);
+  const [activeSize, setActiveSize] = useState('');
   const [activeQuantity, setActiveQuantity] = useState(0);
-  const [tId, setTId] = useState();
+  const [tId, setTId] = useState('');
 
   useEffect(() => {
     let available = ["1", "2", "3", "4", "5"];
     function dropdownSelection(e) {
       if (available.includes(e.target.id)) {
         console.log(e.target.id);
-        setActiveSize(e.target.innerText); // TODO make this work for a list
+        setActiveSize(activeSize + e.target.innerText); // TODO make this work for a list
       } else if (e.target.id === "quantityLess") {
         setActiveQuantity(() => {
           return activeQuantity - 1;
@@ -185,10 +186,10 @@ function Main() {
     pizzaRows.forEach((row) => {
       row.addEventListener("click", dropdownSelection);
       setCartValue(() => {
-        return activeSize + activeQuantity;
+        return  activeSize + activeQuantity;
       });
     });
-  }, [activeQuantity, cartValue, activeSize]);
+  }, [activeQuantity, activeSize]);
 
   return (
     <section className="main">
@@ -204,7 +205,6 @@ function Main() {
   );
 }
 
-// ReactDom.render(<PizzaList />, document.getElementById("root"));
 ReactDom.render(<Main />, document.getElementById("root"));
 
 /* <a href="https://www.freepik.com/photos/background">
