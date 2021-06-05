@@ -3,7 +3,7 @@ import ReactDom from "react-dom";
 import Button from "react-bootstrap/Button";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
-
+import { Link, useParams } from "react-router-dom";
 // MEDIA
 import specific_logo from "./images/chad-montano-MqT0asuoIcU-unsplash.jpg";
 import sauce_photo from "./images/pizza_sauce.png";
@@ -121,6 +121,7 @@ function WhichPhotoToServe(props) {
 }
 
 export const OneRow = (props) => {
+  const { params } = useParams();
   const type = props.type;
   if (props.pizza) {
     const { name, number, ingredients } = props.pizza;
@@ -143,11 +144,13 @@ export const OneRow = (props) => {
               </p>
             </div>
             <DropdownSizeSelection number={number} />
-            <DropdownQuantity />
+            <DropdownQuantity number={number} />
             <div>
-              <button type="button" className="btn btn-info">
-                Spersonalizuj swoją pizzę
-              </button>
+              <Link to={`order_details/${number}`}>
+                <button type="button" className="btn btn-info">
+                  Spersonalizuj swoją pizzę
+                </button>
+              </Link>
             </div>
           </div>
         </div>

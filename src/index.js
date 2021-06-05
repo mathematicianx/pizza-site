@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import ReactDom from "react-dom";
-import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+  useParams,
+} from "react-router-dom";
 import { OneRow } from "./table";
-
+import { OrderDetails } from "./order_details";
 // DATA
 import { menu } from "./data.js";
 
@@ -31,7 +36,6 @@ import Popper from "popper.js";
 import "jquery/dist/jquery.js";
 import "bootstrap/dist/js/bootstrap.js";
 
-
 export function TopBar(props) {
   console.log("topbar");
   return (
@@ -43,9 +47,11 @@ export function TopBar(props) {
           <FontAwesomeIcon icon={faShoppingCart} size="3x" />
           <div>{props.cartValue}</div>
           <div>
-            <button type="button" className="btn btn-info">
-              Przejdź do zamówienia
-            </button>
+            <Link to="/order_summary">
+              <button type="button" className="btn btn-info">
+                Przejdź do zamówienia
+              </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -161,9 +167,9 @@ export function Footer() {
 function Main() {
   const [cartValue, setCartValue] = useState(0);
   const [cartObjects, setCartObjects] = useState([0]);
-  const [activeSize, setActiveSize] = useState('');
+  const [activeSize, setActiveSize] = useState("");
   const [activeQuantity, setActiveQuantity] = useState(0);
-  const [tId, setTId] = useState('');
+  const [tId, setTId] = useState("");
 
   useEffect(() => {
     let available = ["1", "2", "3", "4", "5"];
@@ -173,35 +179,55 @@ function Main() {
         setActiveSize(activeSize + e.target.innerText); // TODO make this work for a list
       } else if (e.target.id === "quantityLess") {
         setActiveQuantity(() => {
+          console.log(e.target.id);
           return activeQuantity - 1;
         });
       } else if (e.target.id === "quantityMore") {
         setActiveQuantity(() => {
+          console.log(e.target.id);
           return activeQuantity + 1;
         });
       }
       return setTId(e.target.id);
     }
+    console.log("useEffect");
     let pizzaRows = document.querySelectorAll(".one-pizza");
     pizzaRows.forEach((row) => {
       row.addEventListener("click", dropdownSelection);
       setCartValue(() => {
-        return  activeSize + activeQuantity;
+        return activeSize + activeQuantity;
       });
     });
+    return () => {
+      console.log("cleanup function");
+      pizzaRows.forEach((row) => {
+        row.removeEventListener("click", dropdownSelection);
+      });
+    };
   }, [activeQuantity, activeSize]);
 
   return (
-    <section className="main">
-      <TopBar cartValue={cartValue}></TopBar>
-      <div className="background">
-        <div className="layout">
-          <LeftMenu />
-          <ProductList />
-        </div>
-        <Footer />
-      </div>
-    </section>
+    <Router>
+      <Switch>
+        <section className="main">
+          <TopBar cartValue={cartValue}></TopBar>
+          <div className="background">
+            <div className="layout">
+              <LeftMenu />
+              <Route exact path="/">
+                <ProductList />
+              </Route>
+              <Route path="/order_summary">Order summary</Route>
+              <Route path="/order_details/:id" children={<OrderDetails />}>
+                <OrderDetails />
+                Order details
+              </Route>
+            </div>
+            <Footer />
+          </div>
+        </section>
+      </Switch>
+    </Router>
   );
 }
 
