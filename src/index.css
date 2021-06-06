@@ -130,3 +130,9 @@ section .layout {
   height: 150px;
   width: 452px;
 }
+
+.additives-list {
+  display: grid;
+  grid-column-gap: 5rem;
+  grid-template-columns: 1fr 1fr 1fr;
+}

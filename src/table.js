@@ -28,25 +28,6 @@ function DropdownSizeSelection(props) {
     setSize(e);
   };
 
-  // let chosenList = [];
-
-  // useEffect(() => {
-  //   let allSizeOfPizzas = document.querySelectorAll("#PizzaSize");
-  //   Array.prototype.map.call(allSizeOfPizzas, (oneSize) => {
-  //     oneSize.addEventListener("click", (e) => {
-  //       if (e.target.innerText === defaultSizeTextInfo) {
-  //         console.log("default value");
-  //       } else {
-  //         let chosenSize = { number: e.target.id, size: e.target.innerText };
-  //         // return console.log(e.target.innerText, e.target.id);
-  //         chosenList = [...chosenList, chosenSize];
-  //         console.log(chosenList);
-  //         return chosenList;
-  //       }
-  //     });
-  //   });
-  // });
-
   return (
     <div className="dropdown" id="PizzaSize" key={props.number}>
       <DropdownButton

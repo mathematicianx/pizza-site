@@ -37,7 +37,18 @@ import "jquery/dist/jquery.js";
 import "bootstrap/dist/js/bootstrap.js";
 
 export function TopBar(props) {
-  console.log("topbar");
+  const {
+    finalSize,
+    setFinalSize,
+    finalQuantity,
+    setFinalQuantity,
+    reset,
+    finalId,
+    setFinalId,
+    finalAdditives,
+    setFinalAdditives,
+  } = React.useContext(CartContext);
+  console.log(finalId, finalSize, finalQuantity, finalAdditives);
   return (
     <section className="topbar">
       <div className="topbar-div">
@@ -48,8 +59,12 @@ export function TopBar(props) {
           <div>{props.cartValue}</div>
           <div>
             <Link to="/order_summary">
-              <button type="button" className="btn btn-info">
-                Przejdź do zamówienia
+              <button
+                type="button"
+                className="btn btn-info"
+                onClick={() => setFinalId(550)}
+              >
+                Przejdź do zamówienia {finalId}
               </button>
             </Link>
           </div>
@@ -164,6 +179,76 @@ export function Footer() {
   );
 }
 
+const initialState = {
+  finalPizzaAdded: "no",
+  finalId: 1,
+  finalSize: "35",
+  finalQuantity: 1,
+  finalAdditives: [],
+};
+
+const actions = {
+  SET_FINAL_PIZZA_ADDED: "SET_FINAL_PIZZA_ADDED",
+  SET_FINAL_ID: "SET_FINAL_ID",
+  SET_FINAL_SIZE: "SET_FINAL_SIZE",
+  SET_FINAL_QUANTITY: "SET_FINAL_QUANTITY",
+  SET_FINAL_ADDITIVES: "SET_FINAL_ADDITIVES",
+  RESET: "RESET",
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case actions.SET_FINAL_PIZZA_ADDED:
+      return { ...state, finalPizzaAdded: action.value };
+    case actions.SET_FINAL_ID:
+      return { ...state, finalId: action.value };
+    case actions.SET_FINAL_SIZE:
+      return { ...state, finalSize: action.value };
+    case actions.SET_FINAL_QUANTITY:
+      return { ...state, finalQuantity: action.value };
+    case actions.SET_FINAL_ADDITIVES:
+      return { ...state, finalAdditives: action.value };
+    case actions.RESET:
+      return { ...state, ...initialState };
+    default:
+      return state;
+  }
+}
+
+export const CartContext = React.createContext();
+
+export function Provider({ children }) {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  const value = {
+    finalPizzaAdded: state.finalPizzaAdded,
+    finalId: state.finalId,
+    finalSize: state.finalSize,
+    finalQuantity: state.finalQuantity,
+    finalAdditives: state.finalAdditives,
+    setPizzaAdded: (value) => {
+      dispatch({ type: actions.SET_PIZZA_ADDED, value });
+    },
+    setFinalId: (value) => {
+      dispatch({ type: actions.SET_FINAL_ID, value });
+    },
+    setFinalSize: (value) => {
+      dispatch({ type: actions.SET_FINAL_SIZE, value });
+    },
+    setFinalQuantity: (value) => {
+      dispatch({ type: actions.SET_FINAL_QUANTITY, value });
+    },
+    setFinalAdditives: (value) => {
+      dispatch({ type: actions.SET_FINAL_ADDITIVES, value });
+    },
+    reset: () => {
+      dispatch({ type: actions.RESET });
+    },
+  };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+}
+
 function Main() {
   const [cartValue, setCartValue] = useState(0);
   const [cartObjects, setCartObjects] = useState([0]);
@@ -210,7 +295,9 @@ function Main() {
     <Router>
       <Switch>
         <section className="main">
-          <TopBar cartValue={cartValue}></TopBar>
+          <Provider>
+            <TopBar cartValue={cartValue}></TopBar>
+          </Provider>
           <div className="background">
             <div className="layout">
               <LeftMenu />
@@ -219,7 +306,9 @@ function Main() {
               </Route>
               <Route path="/order_summary">Order summary</Route>
               <Route path="/order_details/:id" children={<OrderDetails />}>
-                <OrderDetails />
+                <Provider>
+                  <OrderDetails />
+                </Provider>
                 Order details
               </Route>
             </div>
