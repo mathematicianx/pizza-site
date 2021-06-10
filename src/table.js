@@ -10,17 +10,6 @@ import sauce_photo from "./images/pizza_sauce.png";
 import salad_photo from "./images/salad_photo.jpg";
 import drink_photo from "./images/drink_photo.jpg";
 
-const ColoredLine = ({ color }) => (
-  <hr
-    style={{
-      color: color,
-      backgroundColor: color,
-      height: 0.1,
-      width: "100%",
-    }}
-  />
-);
-
 function DropdownSizeSelection(props) {
   let defaultSizeTextInfo = "Rozmiar pizzy";
   let [size, setSize] = useState(defaultSizeTextInfo);
@@ -55,7 +44,7 @@ function DropdownQuantity() {
   };
   return (
     <>
-      <div>
+      <div className="container-quantity">
         <button
           id="quantityLess"
           type="button"
@@ -88,16 +77,28 @@ function WhichPhotoToServe(props) {
   const type = props.type;
   if (type === "pizza") {
     return (
-      <div>
-        <img className="specific-photo" src={specific_logo}></img>
+      <div className="specific-photo">
+        <img src={specific_logo}></img>
       </div>
     );
   } else if (type === "sauce") {
-    return <img className="specific-photo" src={sauce_photo}></img>;
+    return (
+      <div className="specific-photo">
+        <img src={sauce_photo}></img>
+      </div>
+    );
   } else if (type === "salad") {
-    return <img className="specific-photo" src={salad_photo}></img>;
+    return (
+      <div className="specific-photo">
+        <img src={salad_photo}></img>
+      </div>
+    );
   } else if (type === "drink") {
-    return <img className="specific-photo" src={drink_photo}></img>;
+    return (
+      <div className="specific-photo">
+        <img src={drink_photo}></img>
+      </div>
+    );
   }
 }
 
@@ -108,11 +109,10 @@ export const OneRow = (props) => {
     const { name, number, ingredients } = props.pizza;
     if (ingredients) {
       return (
-        <div key={number}>
-          <ColoredLine color="#D3D3D3" />
-          <div className="one-pizza">
+        <div className="one-pizza" key={number}>
+          <div className="one-pizza-main">
             <WhichPhotoToServe type={type} />
-            <div>
+            <div className="one-pizza-information">
               <h1>
                 {number}. {name}
               </h1>
@@ -124,15 +124,15 @@ export const OneRow = (props) => {
                 })}
               </p>
             </div>
+          </div>
+          <div className="one-pizza-aside">
             <DropdownSizeSelection number={number} />
             <DropdownQuantity number={number} />
-            <div>
-              <Link to={`order_details/${number}`}>
-                <button type="button" className="btn btn-info">
-                  Spersonalizuj swoją pizzę
-                </button>
-              </Link>
-            </div>
+            <Link to={`order_details/${number}`}>
+              <button type="button" className="btn btn-info">
+                Spersonalizuj pizzę
+              </button>
+            </Link>
           </div>
         </div>
       );
@@ -140,19 +140,20 @@ export const OneRow = (props) => {
   } else {
     const { name, number } = props;
     return (
-      <div>
-        <ColoredLine color="#D3D3D3" />
-        <div className="one-pizza">
+      <div className="one-pizza">
+        <div className="one-pizza-main">
           <WhichPhotoToServe type={type} />
-          <div>
-            <h1 style={{ height: "100%" }}>{name}</h1>
+          <div className="one-pizza-information">
+            <div>
+              <h1 style={{ height: "100%" }}>{name}</h1>
+            </div>
           </div>
+        </div>
+        <div className="one-pizza-aside">
           <DropdownQuantity />
-          <div>
-            <button type="button" className="btn btn-info">
-              Dodaj do koszyka
-            </button>
-          </div>
+          <button type="button" className="btn btn-info">
+            Dodaj do koszyka
+          </button>
         </div>
       </div>
     );

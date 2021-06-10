@@ -25,16 +25,17 @@ import {
 
 // MEDIA
 import horizontal_logo from "./images/pizza-seeklogo.com_horizontal_bar.png";
-import top_logo from "./images/big_logo_uptop_Flatten.png";
-
-// CSS
-import "./index.css";
+// import top_logo from "./images/big_logo_uptop_Flatten.png";
+import top_logo from "./images/pizza-seeklogo.com_horizontal_bar.png";
 
 // BOOTSTRAP CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import Popper from "popper.js";
 import "jquery/dist/jquery.js";
 import "bootstrap/dist/js/bootstrap.js";
+
+// CSS
+import "./index.css";
 
 export function TopBar(props) {
   const {
@@ -52,19 +53,24 @@ export function TopBar(props) {
   return (
     <section className="topbar">
       <div className="topbar-div">
-        <div></div>
-        <img className="top-logo" src={top_logo}></img>
+        <div className="top-logo">
+          <img src={top_logo}></img>
+        </div>
         <div className="shopping-cart">
-          <FontAwesomeIcon icon={faShoppingCart} size="3x" />
-          <div>{props.cartValue}</div>
-          <div>
+          <div className="shopping-cart-element">
+            <FontAwesomeIcon icon={faShoppingCart} size="2x" />
+          </div>
+          <div className="shopping-cart-element">{props.cartValue}</div>
+          <div className="shopping-cart-element">
             <Link to="/order_summary">
               <button
                 type="button"
                 className="btn btn-info"
                 onClick={() => setFinalId(550)}
               >
-                Przejdź do zamówienia {finalId}
+                <span className="btn-summary-small">
+                  Przejdź do zamówienia {finalId}
+                </span>
               </button>
             </Link>
           </div>
@@ -76,12 +82,22 @@ export function TopBar(props) {
 
 export function ProductList() {
   return (
-    <div key="productList">
-      <PizzaList key="pizzalist" />
-      <Extras key="extras" />
-      <Salads key="salads" />
-      <Drinks key="drinks" />
-    </div>
+    <React.Fragment>
+      <main>
+        <PizzaList key="pizzalist" />
+        <Extras key="extras" />
+        <Salads key="salads" />
+        <Drinks key="drinks" />
+      </main>
+    </React.Fragment>
+  );
+}
+
+export function Header() {
+  return (
+    <head>
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+    </head>
   );
 }
 
@@ -98,7 +114,6 @@ function PizzaList() {
 function Extras() {
   return (
     <section className="pizzalist">
-      <p>Lista dodatków</p>
       <OneRow name="Sos czosnkowy" type="sauce" key="Sos czosnkowy" />
       <OneRow name="Sos pomidorowy" type="sauce" key="Sos pomidorowy" />
       <OneRow name="Sos Tysiąca Wysp" type="sauce" key="Sos Tysiąca Wysp" />
@@ -109,7 +124,6 @@ function Extras() {
 function Salads() {
   return (
     <section className="pizzalist">
-      <p>Lista dodatków</p>
       <OneRow name="Sałatka Gyros" type="salad" />
       <OneRow name="Sałatka grecka" type="salad" />
       <OneRow name="Sałatka Cezar" type="salad" />
@@ -120,7 +134,6 @@ function Salads() {
 function Drinks() {
   return (
     <section className="pizzalist">
-      <p>Lista dodatków</p>
       <OneRow name="Woda" type="drink" />
       <OneRow name="Cola 0,2 l" type="drink" />
       <OneRow name="Cola 0,5 l" type="drink" />
@@ -131,39 +144,40 @@ function Drinks() {
 
 export function LeftMenu() {
   return (
-    <section className="leftmenu">
-      <div className="leftrow">
-        <p>
-          <img src={horizontal_logo} className="horizontal-logo"></img>
-        </p>
-        <p>
-          <FontAwesomeIcon icon={faPhone} />: +48 123 456 789
-        </p>
-        <p>
-          <FontAwesomeIcon icon={faEnvelope} />: pizza@site.com
-        </p>
-        <section>
-          <FontAwesomeIcon icon={faClock} /> Godziny otwarcia:
-          <ul>
-            <li>Pon-Pt: : 10:00 - 20:00</li>
-            <li>Sobota: 10:00 - 23:00</li>
-            <li>Niedziela: Nieczynne</li>
-          </ul>
-        </section>
-        <p>
-          <FontAwesomeIcon icon={faMapMarkerAlt} /> Szkolna 10, Siechnice
-        </p>
-      </div>
-      <hr></hr>
-      <div className="leftrow">
-        <p>Menu</p>
-        <p>Pizza</p>
-        <p>Dodatki do pizzy</p>
-        <p>Sałatki</p>
-        <p>Napoje</p>
-        test2
-      </div>
-    </section>
+    <aside>
+      <section className="leftmenu">
+        <div className="leftrow">
+          <p>
+            <img src={horizontal_logo} className="horizontal-logo"></img>
+          </p>
+          <p>
+            <FontAwesomeIcon icon={faPhone} />: +48 123 456 789
+          </p>
+          <p>
+            <FontAwesomeIcon icon={faEnvelope} />: pizza@site.com
+          </p>
+          <section>
+            <FontAwesomeIcon icon={faClock} /> Godziny otwarcia:
+            <ul>
+              <li>Pon-Pt: : 10:00 - 20:00</li>
+              <li>Sobota: 10:00 - 23:00</li>
+              <li>Niedziela: Nieczynne</li>
+            </ul>
+          </section>
+          <p>
+            <FontAwesomeIcon icon={faMapMarkerAlt} /> Szkolna 10, Siechnice
+          </p>
+        </div>
+        <div className="leftrow">
+          <p>Menu</p>
+          <p>Pizza</p>
+          <p>Dodatki do pizzy</p>
+          <p>Sałatki</p>
+          <p>Napoje</p>
+          test2
+        </div>
+      </section>
+    </aside>
   );
 }
 
@@ -179,12 +193,12 @@ export function Footer() {
   );
 }
 
-const initialState = {
+let initialState = {
   finalPizzaAdded: "no",
   finalId: 1,
   finalSize: "35",
   finalQuantity: 1,
-  finalAdditives: [],
+  finalAdditives: [1, 2, 3],
 };
 
 const actions = {
@@ -293,13 +307,14 @@ function Main() {
 
   return (
     <Router>
+      {/* <Header></Header> */}
       <Switch>
         <section className="main">
           <Provider>
             <TopBar cartValue={cartValue}></TopBar>
           </Provider>
           <div className="background">
-            <div className="layout">
+            <div className="container container-flex">
               <LeftMenu />
               <Route exact path="/">
                 <ProductList />
@@ -309,7 +324,6 @@ function Main() {
                 <Provider>
                   <OrderDetails />
                 </Provider>
-                Order details
               </Route>
             </div>
             <Footer />
