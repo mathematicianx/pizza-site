@@ -8,6 +8,7 @@ import {
   Link,
   useParams,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 import { OneRow } from "./table";
 import { OrderDetails } from "./order_details";
@@ -104,7 +105,7 @@ function PizzaList() {
 
 function Extras() {
   return (
-    <section className="pizzalist">
+    <section className="pizzalist" id="extras">
       <OneRow name="Sos czosnkowy" type="sauce" key="Sos czosnkowy" />
       <OneRow name="Sos pomidorowy" type="sauce" key="Sos pomidorowy" />
       <OneRow name="Sos Tysiąca Wysp" type="sauce" key="Sos Tysiąca Wysp" />
@@ -114,7 +115,7 @@ function Extras() {
 
 function Salads() {
   return (
-    <section className="pizzalist">
+    <section className="pizzalist" id="salads">
       <OneRow name="Sałatka Gyros" type="salad" />
       <OneRow name="Sałatka grecka" type="salad" />
       <OneRow name="Sałatka Cezar" type="salad" />
@@ -124,7 +125,7 @@ function Salads() {
 
 function Drinks() {
   return (
-    <section className="pizzalist">
+    <section className="pizzalist" id="drinks">
       <OneRow name="Woda" type="drink" />
       <OneRow name="Cola 0,2 l" type="drink" />
       <OneRow name="Cola 0,5 l" type="drink" />
@@ -134,6 +135,7 @@ function Drinks() {
 }
 
 export function LeftMenu() {
+  let history = useHistory();
   return (
     <aside>
       <section className="leftmenu">
@@ -160,9 +162,22 @@ export function LeftMenu() {
           </p>
         </div>
         <div className="leftrow">
-          <p>Menu</p>
-          <p>Pizza</p>
-          <p>Dodatki do pizzy</p>
+          <p
+            onClick={() => {
+              history.push("/");
+            }}
+          >
+            Menu
+          </p>
+          {/* <a href="/#salads">Pizza</a> */}
+          <a>Pizza</a>
+          <p
+            onClick={() => {
+              history.push("/#salads");
+            }}
+          >
+            Dodatki do pizzy
+          </p>
           <p>Sałatki</p>
           <p>Napoje</p>
           test2

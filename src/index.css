@@ -187,6 +187,34 @@ div .background {
   text-align: center;
 }
 
+.row-summary {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-summary-detail {
+  display: flex;
+}
+
+.row-summary-detail p {
+  background-color: #17a2b8;
+  color: #fff;
+  font-size: 1.5em;
+  border: #fff 2px solid;
+  border-radius: 0.25em;
+  margin: 0 10px 0 0;
+}
+
+.additive-box {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+.additive-box p {
+  display: inline;
+  padding: 1em;
+}
+
 @media screen and (min-width: 800px) {
   .shopping-cart {
     flex-direction: row;
