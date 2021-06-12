@@ -7,9 +7,11 @@ import {
   Switch,
   Link,
   useParams,
+  Redirect,
 } from "react-router-dom";
 import { OneRow } from "./table";
 import { OrderDetails } from "./order_details";
+import { OrderSummary } from "./order_summary";
 // DATA
 import { menu } from "./data.js";
 
@@ -36,20 +38,11 @@ import "bootstrap/dist/js/bootstrap.js";
 
 // CSS
 import "./index.css";
+import { isArray } from "jquery";
 
 export function TopBar(props) {
-  const {
-    finalSize,
-    setFinalSize,
-    finalQuantity,
-    setFinalQuantity,
-    reset,
-    finalId,
-    setFinalId,
-    finalAdditives,
-    setFinalAdditives,
-  } = React.useContext(CartContext);
-  console.log(finalId, finalSize, finalQuantity, finalAdditives);
+  const { finalPizzaAdded, reset } = React.useContext(CartContext);
+
   return (
     <section className="topbar">
       <div className="topbar-div">
@@ -66,11 +59,9 @@ export function TopBar(props) {
               <button
                 type="button"
                 className="btn btn-info"
-                onClick={() => setFinalId(550)}
+                onClick={() => console.log("finish me")}
               >
-                <span className="btn-summary-small">
-                  Przejdź do zamówienia {finalId}
-                </span>
+                <span className="btn-summary-small">Przejdź do zamówienia</span>
               </button>
             </Link>
           </div>
@@ -194,34 +185,24 @@ export function Footer() {
 }
 
 let initialState = {
-  finalPizzaAdded: "no",
-  finalId: 1,
-  finalSize: "35",
-  finalQuantity: 1,
-  finalAdditives: [1, 2, 3],
+  finalPizzaAdded: [{ test: "test" }],
 };
 
 const actions = {
   SET_FINAL_PIZZA_ADDED: "SET_FINAL_PIZZA_ADDED",
-  SET_FINAL_ID: "SET_FINAL_ID",
-  SET_FINAL_SIZE: "SET_FINAL_SIZE",
-  SET_FINAL_QUANTITY: "SET_FINAL_QUANTITY",
-  SET_FINAL_ADDITIVES: "SET_FINAL_ADDITIVES",
   RESET: "RESET",
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case actions.SET_FINAL_PIZZA_ADDED:
-      return { ...state, finalPizzaAdded: action.value };
-    case actions.SET_FINAL_ID:
-      return { ...state, finalId: action.value };
-    case actions.SET_FINAL_SIZE:
-      return { ...state, finalSize: action.value };
-    case actions.SET_FINAL_QUANTITY:
-      return { ...state, finalQuantity: action.value };
-    case actions.SET_FINAL_ADDITIVES:
-      return { ...state, finalAdditives: action.value };
+      if (state.finalPizzaAdded === initialState.finalPizzaAdded)
+        return { finalPizzaAdded: [{ ...action.value }] };
+      else {
+        return {
+          finalPizzaAdded: [...state.finalPizzaAdded, { ...action.value }],
+        };
+      }
     case actions.RESET:
       return { ...state, ...initialState };
     default:
@@ -236,24 +217,8 @@ export function Provider({ children }) {
 
   const value = {
     finalPizzaAdded: state.finalPizzaAdded,
-    finalId: state.finalId,
-    finalSize: state.finalSize,
-    finalQuantity: state.finalQuantity,
-    finalAdditives: state.finalAdditives,
-    setPizzaAdded: (value) => {
-      dispatch({ type: actions.SET_PIZZA_ADDED, value });
-    },
-    setFinalId: (value) => {
-      dispatch({ type: actions.SET_FINAL_ID, value });
-    },
-    setFinalSize: (value) => {
-      dispatch({ type: actions.SET_FINAL_SIZE, value });
-    },
-    setFinalQuantity: (value) => {
-      dispatch({ type: actions.SET_FINAL_QUANTITY, value });
-    },
-    setFinalAdditives: (value) => {
-      dispatch({ type: actions.SET_FINAL_ADDITIVES, value });
+    setFinalPizzaAdded: (value) => {
+      dispatch({ type: actions.SET_FINAL_PIZZA_ADDED, value });
     },
     reset: () => {
       dispatch({ type: actions.RESET });
@@ -309,26 +274,27 @@ function Main() {
     <Router>
       {/* <Header></Header> */}
       <Switch>
-        <section className="main">
-          <Provider>
+        <Provider>
+          <section className="main">
             <TopBar cartValue={cartValue}></TopBar>
-          </Provider>
-          <div className="background">
-            <div className="container container-flex">
-              <LeftMenu />
-              <Route exact path="/">
-                <ProductList />
-              </Route>
-              <Route path="/order_summary">Order summary</Route>
-              <Route path="/order_details/:id" children={<OrderDetails />}>
-                <Provider>
+
+            <div className="background">
+              <div className="container container-flex">
+                <LeftMenu />
+                <Route exact path="/">
+                  <ProductList />
+                </Route>
+                <Route path="/order_summary" children={<OrderDetails />}>
+                  <OrderSummary />
+                </Route>
+                <Route path="/order_details/:id" children={<OrderDetails />}>
                   <OrderDetails />
-                </Provider>
-              </Route>
+                </Route>
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
-        </section>
+          </section>
+        </Provider>
       </Switch>
     </Router>
   );

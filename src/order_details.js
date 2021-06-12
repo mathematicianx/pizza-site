@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import ReactDom from "react-dom";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect, useHistory } from "react-router-dom";
 import { CartContext } from "./index";
 import { menu, additives } from "./data.js";
 
 export const OrderDetails = () => {
-  const {
-    finalSize,
-    setFinalSize,
-    finalQuantity,
-    setFinalQuantity,
-    finalAdditives,
-    setFinalAdditives,
-    reset,
-  } = React.useContext(CartContext);
+  let history = useHistory();
+
+  const redirect = () => {
+    history.push("/");
+  };
+
+  const { finalPizzaAdded, setFinalPizzaAdded, reset } =
+    React.useContext(CartContext);
   const { id } = useParams();
   const current_pizza = menu.find((pizza) => pizza.number === parseInt(id));
   const ingredients_buttons = current_pizza.ingredients.map((oneIngredient) => {
@@ -76,7 +75,7 @@ export const OrderDetails = () => {
   });
 
   const [quantity, setQuantity] = useState(0);
-  const [size, setSize] = useState("35");
+  const [size, setSize] = useState("35cm");
   const [finishedOrder, setFinishedOrder] = useState({});
   const [finalAdditivesUpdateable, setFinalAdditivesUpdateable] = useState([]);
   /* please continue */
@@ -88,12 +87,6 @@ export const OrderDetails = () => {
             ...finalAdditivesUpdateable,
             oneAdditive.number,
           ]);
-        console.log(
-          size,
-          quantity,
-          oneAdditive.number,
-          finalAdditivesUpdateable
-        );
       } else if (oneAdditive.boxChecked === "no") {
         if (finalAdditivesUpdateable.includes(oneAdditive.number))
           setFinalAdditivesUpdateable(
@@ -147,7 +140,7 @@ export const OrderDetails = () => {
               value="one"
               id="one"
               onClick={() => {
-                setSize("35");
+                setSize("35cm");
               }}
               defaultChecked
             ></input>
@@ -158,7 +151,7 @@ export const OrderDetails = () => {
               value="two"
               id="two"
               onClick={() => {
-                setSize("45");
+                setSize("45cm");
               }}
             ></input>
             <label for="two">45cm - {current_pizza.price["45cm"]}zł</label>
@@ -175,10 +168,14 @@ export const OrderDetails = () => {
             <button
               className="btn btn-info mr-1"
               onClick={() => {
-                console.log(finalAdditivesUpdateable);
-                setFinalQuantity(finishedOrder.quantity);
-                setFinalSize(finishedOrder.size);
-                setFinalAdditives(finishedOrder.finalAdditivesUpdateable);
+                setFinalPizzaAdded({
+                  id: finishedOrder.id,
+                  quantity: finishedOrder.quantity,
+                  size: finishedOrder.size,
+                  additives: finishedOrder.finalAdditivesUpdateable,
+                });
+
+                history.push("/");
               }}
             >
               Dodaj do zamówienia
