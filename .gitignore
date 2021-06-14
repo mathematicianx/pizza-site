@@ -23,3 +23,13 @@ yarn-debug.log*
 yarn-error.log*
 
 *.xcf
+
+#migrations
+/mysite/backend/migrations
+
+#cached files
+/mysite/backend/__pycache__
+/mysite/__pycache__/
+
+#db
+db.sqlite3
