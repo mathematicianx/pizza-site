@@ -5,7 +5,7 @@ from .models import Pizza, PizzaSize, PizzaPrice, Ingredients, Additives
 
 @admin.register(Pizza)
 class PizzaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
+    list_display = ('id', 'name', 'pizza_ingredients')
 
 @admin.register(PizzaSize)
 class PizzaSizeAdmin(admin.ModelAdmin):
@@ -17,7 +17,8 @@ class PizzaPriceAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredients)
 class IngredientsAdmin(admin.ModelAdmin):
-    list_display = ('id',  'which_pizza', 'name',)
+    list_display = ('id', 'name',)
+    filter_horizontal = ('which_pizza',)
 
 @admin.register(Additives)
 class AdditivesAdmin(admin.ModelAdmin):

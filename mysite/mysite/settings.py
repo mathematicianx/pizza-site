@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'frontend',
     'backend',
     'rest_framework',
+    'corsheaders',
 ]
 
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,7 +60,8 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'frontend/build'), ],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/build/'), ],
+        # change this to work with webpack dist folder
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,4 +142,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+       'http://localhost:8000',
+)
+
 

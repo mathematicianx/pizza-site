@@ -29,6 +29,7 @@ yarn-error.log*
 
 #cached files
 /mysite/backend/__pycache__
+/mysite/__pycache__
 /mysite/__pycache__/
 
 #db

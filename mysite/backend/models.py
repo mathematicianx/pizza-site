@@ -33,7 +33,7 @@ class PizzaPrice(models.Model):
 
 class Ingredients(models.Model):
     id = models.IntegerField(primary_key=True)
-    which_pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE, null=False, related_name="pizza_ingredients")
+    which_pizza = models.ManyToManyField(Pizza, related_name="pizza_ingredients")
     name = models.CharField(max_length=30)
 
     def __str__(self):
