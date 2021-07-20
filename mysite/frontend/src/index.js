@@ -10,9 +10,10 @@ import {
   Redirect,
   useHistory,
 } from "react-router-dom";
-import { OneRow } from "./table";
-import { OrderDetails } from "./order_details";
+import { OneRow, OneRow222 } from "./table";
+import { OrderDetails, OrderDetails222 } from "./order_details";
 import { OrderSummary } from "./order_summary";
+import { FetchMenu } from "./utils";
 // DATA
 import { menu } from "./data.js";
 
@@ -39,7 +40,6 @@ import "bootstrap/dist/js/bootstrap.js";
 
 // CSS
 import "./index.css";
-import { isArray } from "jquery";
 
 export function TopBar(props) {
   const { finalPizzaAdded, reset } = React.useContext(CartContext);
@@ -76,10 +76,11 @@ export function ProductList() {
   return (
     <React.Fragment>
       <main>
-        <PizzaList key="pizzalist" />
-        <Extras key="extras" />
+        {/* <PizzaList key="pizzalist" /> */}
+        <PizzaList222 />
+        {/* <Extras key="extras" />
         <Salads key="salads" />
-        <Drinks key="drinks" />
+        <Drinks key="drinks" /> */}
       </main>
     </React.Fragment>
   );
@@ -103,6 +104,34 @@ function PizzaList() {
   );
 }
 
+function PizzaList222() {
+  const data = FetchMenu();
+  return (
+    <section className="pizzalist">
+      {data.map((pizza) => {
+        return (
+          <OneRow222 key={pizza.id} pizza={pizza} type="pizza"></OneRow222>
+        );
+      })}
+    </section>
+  );
+}
+
+//   if (data) {
+//     return (
+//       <section className="pizzalist">
+//         {data.map((pizza) => {
+//           <div>test123</div>;
+//           // return (
+//           //   <OneRow222 key={pizza.id} pizza={pizza} type="pizza"></OneRow222>
+//           // );
+//         })}
+//       </section>
+//     );
+//   } else {
+//     return <div>test12312512512</div>;
+//   }
+// }
 function Extras() {
   return (
     <section className="pizzalist" id="extras">
@@ -302,8 +331,8 @@ function Main() {
                 <Route path="/order_summary" children={<OrderDetails />}>
                   <OrderSummary />
                 </Route>
-                <Route path="/order_details/:id" children={<OrderDetails />}>
-                  <OrderDetails />
+                <Route path="/order_details/:id" children={<OrderDetails222 />}>
+                  <OrderDetails222 />
                 </Route>
               </div>
               <Footer />

@@ -159,3 +159,64 @@ export const OneRow = (props) => {
     );
   }
 };
+
+export const OneRow222 = (props) => {
+  const { params } = useParams();
+  const type = props.type;
+  if (props.pizza) {
+    const { name, id, pizza_ingredients } = props.pizza;
+    if (pizza_ingredients) {
+      return (
+        <div className="one-pizza" key={id}>
+          <div className="one-pizza-main">
+            <WhichPhotoToServe type={type} />
+            <div className="one-pizza-information">
+              <h1>
+                {id}. {name}
+              </h1>
+              <p>
+                {pizza_ingredients.map((ingr) => {
+                  const commSepIngr = [];
+                  commSepIngr.push(ingr + ", ");
+                  return commSepIngr;
+                })}
+              </p>
+            </div>
+          </div>
+          <div className="one-pizza-aside">
+            <DropdownSizeSelection number={id} />
+            <DropdownQuantity number={id} />
+            <Link to={`order_details/${id}`}>
+              <button type="button" className="btn btn-info">
+                Spersonalizuj pizzę
+              </button>
+            </Link>
+          </div>
+        </div>
+      );
+    }
+  }
+};
+//     } else {
+//       const { name, number } = props;
+//       return (
+//         <div className="one-pizza">
+//           <div className="one-pizza-main">
+//             <WhichPhotoToServe type={type} />
+//             <div className="one-pizza-information">
+//               <div>
+//                 <h1 style={{ height: "100%" }}>{name}</h1>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="one-pizza-aside">
+//             <DropdownQuantity />
+//             <button type="button" className="btn btn-info">
+//               Dodaj do koszyka
+//             </button>
+//           </div>
+//         </div>
+//       );
+//     }
+//   }
+// };

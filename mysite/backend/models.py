@@ -28,7 +28,8 @@ class PizzaPrice(models.Model):
     price = models.IntegerField()
 
     def __str__(self):
-        return self.price
+        str_price = str(self.price)
+        return str_price
 
 
 class Ingredients(models.Model):
